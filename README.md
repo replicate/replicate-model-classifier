@@ -44,7 +44,7 @@ Examples
 
 To get a pretty-printed view of the prompt that was used to classify the model, add the `prompt` query parameter:
 
-```
+```plaintext
 GET /api/models/:owner/:modelName?prompt=1
 ```
 
@@ -58,7 +58,7 @@ Examples
 
 It can be helpful to see all the data that goes into the model classification. You can see all the data by adding the `debug` query parameter:
 
-```
+```plaintext
 GET /api/models/:owner/:modelName?debug=1
 ```
 
@@ -71,7 +71,7 @@ Examples:
 
 ## View Hugging Face task data
 
-```
+```plaintext
 GET /api/tasks
 ```
 
@@ -79,7 +79,7 @@ See [/api/tasks](https://replicate-model-classifier.ziki.workers.dev/api/tasks)
 
 ## View Hugging Face task names
 
-```
+```plaintext
 GET /api/taskNames
 ```
 
