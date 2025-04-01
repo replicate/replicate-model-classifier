@@ -1,5 +1,15 @@
 # Replicate Model Classifier
 
+A simple HTTP API for classifying [Replicate models](https://replicate.com/models) into [Hugging Face tasks](https://huggingface.co/tasks).
+
+Powered by:
+
+- **Cloudflare Workers** for the API
+- **Hono** for the HTTP API
+- **Anthropic Claude 3.7 Sonnet** for the model classification
+- **Replicate API** for the model metadata
+- **Hugging Face Tasks** for the task definitions
+
 ## API
 
 Base URL: `https://replicate-model-classifier.ziki.workers.dev/`
