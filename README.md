@@ -5,6 +5,7 @@ An HTTP API to classify [Replicate models](https://replicate.com/explore) into [
 Powered by:
 
 - **Cloudflare Workers** for hosting the HTTP API
+- **Cloudflare KV** for caching
 - **Hono** for authoring the HTTP API
 - **Anthropic Claude 3.7 Sonnet** for model classification
 - **Replicate API** for model metadata
@@ -55,7 +56,7 @@ Examples
 To get a pretty-printed view of the prompt that was used to classify the model, add the `prompt` query parameter:
 
 ```plaintext
-GET /api/models/:owner/:modelName?prompt=1
+GET /api/models/:owner/:model?prompt=1
 ```
 
 Examples
@@ -69,7 +70,7 @@ Examples
 It can be helpful to see all the data that goes into the model classification. You can see all the data by adding the `debug` query parameter:
 
 ```plaintext
-GET /api/models/:owner/:modelName?debug=1
+GET /api/models/:owner/:model?debug=1
 ```
 
 Examples:
@@ -77,6 +78,14 @@ Examples:
 - [/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1)
 - [/api/models/meta/meta-llama-3-8b-instruct?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/meta/meta-llama-3-8b-instruct?debug=1)
 - [/api/models/black-forest-labs/flux-schnell?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/black-forest-labs/flux-schnell?debug=1)
+
+## Bust the cache
+
+Responses are cached forever by default. To bust the cache for a specific model, use the `force` query parameter:
+
+```plaintext
+GET /api/models/:owner/:model?force=1
+```
 
 
 ## View Hugging Face task data
