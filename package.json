@@ -6,12 +6,16 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "start": "wrangler dev"
+    "start": "wrangler dev",
+    "seed": "tsx script/seed.ts"
   },
   "type": "module",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",
     "@types/lodash-es": "^4.17.12",
+    "all-the-public-replicate-models": "^1.427.0",
+    "lodash-es": "^4.17.21",
+    "tsx": "^4.19.3",
     "typescript": "^5.5.2",
     "wrangler": "^4.6.0"
   },

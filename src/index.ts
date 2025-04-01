@@ -107,6 +107,40 @@ app.get('/api/taskNames', async (c) => {
   return c.json(taskNames)
 })
 
+app.post('/api/cache/purge', async (c) => {
+  try {
+    let totalDeleted = 0
+    let cursor: string | undefined
+    
+    do {
+      // List keys with pagination
+      const keys = await c.env.CLASSIFICATIONS_CACHE.list({ cursor })
+      
+      // Delete each key in the current page
+      const deletePromises = keys.keys.map(key => 
+        c.env.CLASSIFICATIONS_CACHE.delete(key.name)
+      )
+      
+      await Promise.all(deletePromises)
+      totalDeleted += keys.keys.length
+      
+      // Get the cursor for the next page
+      cursor = keys.list_complete ? undefined : keys.cursor
+    } while (cursor)
+    
+    return c.json({
+      success: true,
+      message: `Successfully purged ${totalDeleted} entries from cache`
+    })
+  } catch (error) {
+    console.error('Error purging cache:', error)
+    return c.json({
+      success: false,
+      error: 'Failed to purge cache'
+    }, 500)
+  }
+})
+
 app.get('/api/models/:owner/:modelName', async (c) => {
   const { owner, modelName } = c.req.param()
   const cacheKey = `${owner}/${modelName}`
@@ -220,6 +254,20 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     });
     console.log(claudeResponse.content[0].text);
     classification = JSON.parse(claudeResponse.content[0].text);
+    
+    classification.taskSummary = TASKS_DATA[classification.task]?.summary
+
+    // Prepare data for caching
+    const cacheData = {
+      classification,
+      prompt,
+      claudeResponse,
+      model,
+      examples
+    }
+
+    // Cache the data forever (no expirationTtl)
+    await c.env.CLASSIFICATIONS_CACHE.put(cacheKey, JSON.stringify(cacheData))
   } catch (e) {
     console.error(e)
     return c.json({
@@ -227,23 +275,15 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     }, 500)
   }
 
-  classification.taskSummary = TASKS_DATA[classification.task]?.summary
-
-  // Prepare data for caching
-  const cacheData = {
-    classification,
-    prompt,
-    claudeResponse,
-    model,
-    examples
-  }
-
-  // Cache the data forever (no expirationTtl)
-  await c.env.CLASSIFICATIONS_CACHE.put(cacheKey, JSON.stringify(cacheData))
-
   // Show everything
   if (c.req.query('debug')) {
-    return c.json(cacheData)
+    return c.json({
+      classification,
+      prompt,
+      claudeResponse,
+      model,
+      examples
+    })
   }
 
   return c.json({
