@@ -1,5 +1,6 @@
 {
-  "name": "getting-started-cloudflare-workers",
+  "name": "replicate-model-classifier",
+  "repository": "https://github.com/zeke/replicate-model-classifier",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -15,9 +16,11 @@
     "wrangler": "^4.6.0"
   },
   "dependencies": {
-    "anthropic": "^0.0.0",
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@huggingface/tasks": "^0.18.5",
     "dedent": "^1.5.3",
     "hono": "^4.6.13",
+    "marked": "^15.0.7",
     "replicate": "^1.0.1",
     "yaml": "^2.7.1"
   }
