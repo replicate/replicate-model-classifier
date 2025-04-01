@@ -13,11 +13,18 @@ GET /api/models/:owner/:modelName
 Returns a JSON object with the model classification:
 
 
-```json
-{
-  "model": "wavespeedai/wan-2.1-i2v-480p",
-}
-```
+  ```json
+  {
+      "model": "salesforce/blip",
+      "classification": {
+          "summary": "Generate image captions and answer questions about images",
+          "inputTypes": ["image", "text"],
+          "outputTypes": ["text"],
+          "task": "visual-question-answering",
+          "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions."
+      }
+  }
+  ```
 
 Examples
 

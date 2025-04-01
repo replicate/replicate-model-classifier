@@ -99,21 +99,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   `).join('\n\n---------------\n\n')}
 
 
-  ## Modalities
-
-  Based on the information above, please classify the model into one of the following modalites:
-
-  - text-to-text
-  - text-to-image
-  - image-to-text
-  - image-to-image
-  - audio-to-text
-  - text-to-audio
-  - etc
-
-  This should be in the format "x-to-y" where x and y are the input and output modalities, like "text-to-image", "image-to-text", "image-to-video", "text-to-audio", etc.
-
-  ## Tasks
+  ## Task Classification
 
   Based on the information above, please classify the model into one of the following tasks:
 
@@ -121,13 +107,14 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     - ${taskName}: ${TASKS_DATA[taskName]?.summary}
   `).join('\n')}
 
-  ## Classification output format
+  ## Output format
 
   Return a JSON object with the following fields:
 
   - summary: A short summary of what the model does in 10 words or less. This should not be a sales pitch.
+  - inputTypes: An array of the types of inputs the model accepts, like "text", "image", "audio", etc.
+  - outputTypes: An array of the types of outputs the model returns, like "text", "image", "audio", etc.
   - task: The task the model performs. This should be one of the Hugging Face task names.
-  - modality: The modality of the model. 
 
   Do not include any other text in your response.
   Do not explain your reasoning.
