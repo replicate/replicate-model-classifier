@@ -28,6 +28,9 @@ app.get('/', async (c) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Replicate Model Classifier</title>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
       <style>
         .markdown-body {
           box-sizing: border-box;
@@ -39,7 +42,14 @@ app.get('/', async (c) => {
       </style>
     </head>
     <body class="markdown-body">
-      ${marked.parse(readme)}
+      ${marked.parse(readme, {
+        highlight: (code, lang) => {
+          if (lang && hljs.getLanguage(lang)) {
+            return hljs.highlight(code, { language: lang }).value;
+          }
+          return code;
+        }
+      })}
     </body>
     </html>
   `

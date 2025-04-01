@@ -6,8 +6,8 @@ Base URL: `https://replicate-model-classifier.ziki.workers.dev/`
 
 ### Classify a model
 
-```
-GET /api/models/:owner/:modelName
+```plaintext
+GET /api/models/:owner/:model
 ```
 
 Returns a JSON object with the model classification:
