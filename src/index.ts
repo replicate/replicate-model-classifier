@@ -110,12 +110,14 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   - text-to-audio
   - etc
 
+  This should be in the format "x-to-y" where x and y are the input and output modalities, like "text-to-image", "image-to-text", "image-to-video", "text-to-audio", etc.
+
   ## Tasks
 
   Based on the information above, please classify the model into one of the following tasks:
 
   ${Object.keys(TASKS_DATA).map((taskName) => dedent`
-    - ${taskName}: ${TASKS_DATA[taskName].summary}
+    - ${taskName}: ${TASKS_DATA[taskName]?.summary}
   `).join('\n')}
 
   ## Classification output format
@@ -124,7 +126,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
 
   - summary: A short summary of what the model does in 10 words or less. This should not be a sales pitch.
   - task: The task the model performs. This should be one of the Hugging Face task names.
-  - modality: The modality of the model. This should be in the format "x-to-y" where x and y are the input and output modalities, like "text-to-image", "image-to-text", "image-to-video", "text-to-audio", etc.
+  - modality: The modality of the model. 
 
   Do not include any other text in your response.
   Do not explain your reasoning.
@@ -141,11 +143,12 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   }
 
   let classification: any
+  let claudeResponse: any
   try {
     const anthropic = new Anthropic({
       apiKey: c.env.ANTHROPIC_API_KEY
     });
-    const claudeResponse = await anthropic.messages.create({
+    claudeResponse = await anthropic.messages.create({
       model: "claude-3-7-sonnet-20250219",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 1024
@@ -159,6 +162,8 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     }, 500)
   }
 
+  classification.taskSummary = TASKS_DATA[classification.task]?.summary
+
   if (c.req.query('classification')) {
     return c.json(classification)
   }
@@ -166,6 +171,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   return c.json({
     classification,
     prompt,
+    claudeResponse,
     model,
     examples
   })
