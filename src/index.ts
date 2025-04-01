@@ -18,7 +18,8 @@ interface Env {
 }
 
 app.get('/', async (c) => {
-  const readme = await fetch('https://raw.githubusercontent.com/zeke/replicate-model-classifier/main/README.md').then(res => res.text())
+  const rawReadmeUrl = 'https://raw.githubusercontent.com/zeke/replicate-model-classifier/refs/heads/main/README.md'
+  const readme = await fetch(rawReadmeUrl).then(res => res.text())
   const html = `
     <!DOCTYPE html>
     <html lang="en">
