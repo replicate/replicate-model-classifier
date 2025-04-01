@@ -4,10 +4,19 @@
 
 Base URL: `https://replicate-model-classifier.ziki.workers.dev/`
 
-### Get model classification
+### Classify a model
 
 ```
 GET /api/models/:owner/:modelName
+```
+
+Returns a JSON object with the model classification:
+
+
+```json
+{
+  "model": "wavespeedai/wan-2.1-i2v-480p",
+}
 ```
 
 Examples
@@ -24,7 +33,9 @@ Examples
 - [/api/models/stability-ai/sdxl](https://replicate-model-classifier.ziki.workers.dev/api/models/stability-ai/sdxl)
 
 
-### Peek at the prompt
+### View the prompt
+
+To get a pretty-printed view of the prompt that was used to classify the model, add the `prompt` query parameter:
 
 ```
 GET /api/models/:owner/:modelName?prompt=1
@@ -33,3 +44,36 @@ GET /api/models/:owner/:modelName?prompt=1
 Examples
 
 - [/api/models/wavespeedai/wan-2.1-i2v-480p?prompt=1](https://replicate-model-classifier.ziki.workers.dev/api/models/wavespeedai/wan-2.1-i2v-480p?prompt=1)
+- [/api/models/meta/meta-llama-3-8b-instruct?prompt=1](https://replicate-model-classifier.ziki.workers.dev/api/models/meta/meta-llama-3-8b-instruct?prompt=1)
+- [/api/models/black-forest-labs/flux-schnell?prompt=1](https://replicate-model-classifier.ziki.workers.dev/api/models/black-forest-labs/flux-schnell?prompt=1)
+
+## View everything
+
+It can be helpful to see all the data that goes into the model classification. You can see all the data by adding the `debug` query parameter:
+
+```
+GET /api/models/:owner/:modelName?debug=1
+```
+
+Examples:
+
+- [/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1)
+- [/api/models/meta/meta-llama-3-8b-instruct?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/meta/meta-llama-3-8b-instruct?debug=1)
+- [/api/models/black-forest-labs/flux-schnell?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/black-forest-labs/flux-schnell?debug=1)
+
+
+## View Hugging Face task data
+
+```
+GET /api/tasks
+```
+
+See [/api/tasks](https://replicate-model-classifier.ziki.workers.dev/api/tasks)
+
+## View Hugging Face task names
+
+```
+GET /api/taskNames
+```
+
+See [/api/taskNames](https://replicate-model-classifier.ziki.workers.dev/api/taskNames)

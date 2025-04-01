@@ -165,16 +165,20 @@ app.get('/api/models/:owner/:modelName', async (c) => {
 
   classification.taskSummary = TASKS_DATA[classification.task]?.summary
 
-  if (c.req.query('classification')) {
-    return c.json(classification)
+  // Show everything
+  if (c.req.query('debug')) {
+    return c.json({
+      classification,
+      prompt,
+      claudeResponse,
+      model,
+      examples
+    })
   }
 
   return c.json({
-    classification,
-    prompt,
-    claudeResponse,
-    model,
-    examples
+    model: `${model.owner}/${model.name}`,
+    classification
   })
 })
 
