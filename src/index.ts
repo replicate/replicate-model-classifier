@@ -15,6 +15,49 @@ app.use(cors());
 interface Env {
   REPLICATE_API_TOKEN: string
   ANTHROPIC_API_KEY: string
+  MODEL_CLASSIFICATIONS_KV: KVNamespace
+}
+
+interface CachedData {
+  classification: {
+    summary: string
+    inputTypes: string[]
+    outputTypes: string[]
+    task: string
+    taskSummary: string
+  }
+  prompt: string
+  claudeResponse: {
+    content: Array<{
+      text: string
+    }>
+  }
+  model: {
+    name: string
+    description: string
+    owner: string
+    latest_version: {
+      openapi_schema: {
+        components: {
+          schemas: {
+            Input: {
+              properties: Record<string, {
+                description: string
+                type: string
+              }>
+            }
+            Output: {
+              properties?: Record<string, unknown>
+            }
+          }
+        }
+      }
+    }
+  }
+  examples: Array<{
+    input: Record<string, unknown>
+    output: unknown
+  }>
 }
 
 app.get('/', async (c) => {
@@ -66,6 +109,30 @@ app.get('/api/taskNames', async (c) => {
 
 app.get('/api/models/:owner/:modelName', async (c) => {
   const { owner, modelName } = c.req.param()
+  const cacheKey = `${owner}/${modelName}`
+  
+  // Check cache first, unless force refresh is requested
+  if (!c.req.query('force')) {
+    const cachedData = await c.env.MODEL_CLASSIFICATIONS_KV.get<CachedData>(cacheKey, 'json')
+    if (cachedData) {
+      console.log('Cache hit for', cacheKey)
+      // If debug mode is requested, return full data
+      if (c.req.query('debug')) {
+        return c.json(cachedData)
+      }
+      // If prompt is requested, return the prompt used
+      if (c.req.query('prompt')) {
+        return c.text(cachedData.prompt)
+      }
+      // Return normal response
+      return c.json({
+        model: cacheKey,
+        classification: cachedData.classification
+      })
+    }
+  }
+  console.log('Cache miss for', cacheKey)
+
   const replicate = new Replicate({auth: c.env.REPLICATE_API_TOKEN})
   const model = await replicate.models.get(owner, modelName)
 
@@ -162,19 +229,25 @@ app.get('/api/models/:owner/:modelName', async (c) => {
 
   classification.taskSummary = TASKS_DATA[classification.task]?.summary
 
+  // Prepare data for caching
+  const cacheData = {
+    classification,
+    prompt,
+    claudeResponse,
+    model,
+    examples
+  }
+
+  // Cache the data forever (no expirationTtl)
+  await c.env.MODEL_CLASSIFICATIONS_KV.put(cacheKey, JSON.stringify(cacheData))
+
   // Show everything
   if (c.req.query('debug')) {
-    return c.json({
-      classification,
-      prompt,
-      claudeResponse,
-      model,
-      examples
-    })
+    return c.json(cacheData)
   }
 
   return c.json({
-    model: `${model.owner}/${model.name}`,
+    model: cacheKey,
     classification
   })
 })
