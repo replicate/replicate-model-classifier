@@ -15,7 +15,7 @@ app.use(cors());
 interface Env {
   REPLICATE_API_TOKEN: string
   ANTHROPIC_API_KEY: string
-  MODEL_CLASSIFICATIONS_KV: KVNamespace
+  CLASSIFICATIONS_CACHE: KVNamespace
 }
 
 interface CachedData {
@@ -113,7 +113,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   
   // Check cache first, unless force refresh is requested
   if (!c.req.query('force')) {
-    const cachedData = await c.env.MODEL_CLASSIFICATIONS_KV.get<CachedData>(cacheKey, 'json')
+    const cachedData = await c.env.CLASSIFICATIONS_CACHE.get<CachedData>(cacheKey, 'json')
     if (cachedData) {
       console.log('Cache hit for', cacheKey)
       // If debug mode is requested, return full data
@@ -239,7 +239,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   }
 
   // Cache the data forever (no expirationTtl)
-  await c.env.MODEL_CLASSIFICATIONS_KV.put(cacheKey, JSON.stringify(cacheData))
+  await c.env.CLASSIFICATIONS_CACHE.put(cacheKey, JSON.stringify(cacheData))
 
   // Show everything
   if (c.req.query('debug')) {
