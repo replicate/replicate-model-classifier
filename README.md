@@ -11,6 +11,8 @@ Powered by:
 - **Replicate API** for model metadata
 - **Hugging Face Tasks** for model task metadata
 
+Repository: https://github.com/zeke/replicate-model-classifier
+
 ## API
 
 Base URL: `https://replicate-model-classifier.ziki.workers.dev/`
