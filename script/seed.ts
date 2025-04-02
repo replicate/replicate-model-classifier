@@ -23,4 +23,9 @@ for (const model of mostRunModels) {
         console.error(`\nError fetching ${url}: ${response.status} ${response.statusText}`)
         process.exit(1)
     }
+    
+    const isCached = response.headers.get('X-Cache') === 'HIT'
+    if (!isCached) {
+        await new Promise(resolve => setTimeout(resolve, 10000))
+    }
 }

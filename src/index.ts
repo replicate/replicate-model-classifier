@@ -152,16 +152,22 @@ app.get('/api/models/:owner/:modelName', async (c) => {
       console.log('Cache hit for', cacheKey)
       // If debug mode is requested, return full data
       if (c.req.query('debug')) {
-        return c.json(cachedData)
+        return c.json(cachedData, 200, {
+          'X-Cache': 'HIT'
+        })
       }
       // If prompt is requested, return the prompt used
       if (c.req.query('prompt')) {
-        return c.text(cachedData.prompt)
+        return c.text(cachedData.prompt, 200, {
+          'X-Cache': 'HIT'
+        })
       }
       // Return normal response
       return c.json({
         model: cacheKey,
         classification: cachedData.classification
+      }, 200, {
+        'X-Cache': 'HIT'
       })
     }
   }
