@@ -212,7 +212,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     
     Input: ${YAML.stringify(example.input)}
 
-    Output: ${JSON.stringify(example.output, null, 2)}
+    Output: ${JSON.stringify(example.output, null, 2).slice(0, 3000)}
   `).join('\n\n---------------\n\n')}
 
 

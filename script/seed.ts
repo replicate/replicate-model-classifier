@@ -27,6 +27,6 @@ for (const model of mostRunModels) {
     
     const isCached = response.headers.get('X-Cache') === 'HIT'
     if (!isCached) {
-        await new Promise(resolve => setTimeout(resolve, 10000))
+        await new Promise(resolve => setTimeout(resolve, 10 * 1000))
     }
 }
