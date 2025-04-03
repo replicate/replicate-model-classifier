@@ -277,7 +277,8 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   } catch (e) {
     console.error(e)
     return c.json({
-      error: 'Failed to classify model'
+      error: 'Failed to classify model',
+      message: e.message
     }, 500)
   }
 

@@ -21,6 +21,7 @@ for (const model of mostRunModels) {
     const response = await fetch(url)
     if (!response.ok) {
         console.error(`\nError fetching ${url}: ${response.status} ${response.statusText}`)
+        console.error(await response.json())
         process.exit(1)
     }
     
