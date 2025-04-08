@@ -18,15 +18,33 @@ const baseUrl = 'http://localhost:8787'
 for (const model of mostRunModels) {  
     const url = `${baseUrl}/api/models/${model.owner}/${model.name}`
     console.log(url)
-    const response = await fetch(url)
-    if (!response.ok) {
-        console.error(`\nError fetching ${url}: ${response.status} ${response.statusText}`)
-        console.error(await response.json())
-        process.exit(1)
-    }
     
-    const isCached = response.headers.get('X-Cache') === 'HIT'
-    if (!isCached) {
-        await new Promise(resolve => setTimeout(resolve, 10 * 1000))
+    try {
+        const response = await fetch(url)
+        const responseText = await response.text()
+        
+        if (!response.ok) {
+            console.error(`\nError fetching ${url}: ${response.status} ${response.statusText}`)
+            console.error('Response:', responseText)
+            continue // Skip to next model instead of exiting
+        }
+        
+        try {
+            // Only try to parse as JSON if we got a successful response
+            JSON.parse(responseText)
+            // console.log(`Successfully processed ${model.owner}/${model.name}`)
+        } catch (parseError) {
+            console.error(`\nError parsing JSON for ${url}:`, parseError.message)
+            console.error('Response text:', responseText)
+            continue
+        }
+        
+        const isCached = response.headers.get('X-Cache') === 'HIT'
+        if (!isCached) {
+            await new Promise(resolve => setTimeout(resolve, 10 * 1000))
+        }
+    } catch (error) {
+        console.error(`\nError processing ${url}:`, error.message)
+        continue
     }
 }
