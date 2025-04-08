@@ -150,7 +150,19 @@ app.get('/api/classifications', async (c) => {
     return [key.name, data?.classification]
   }))
   
-  return c.json(Object.fromEntries(classifications))
+  const result = Object.fromEntries(classifications)
+  
+  // Filter by task if task query param is provided
+  const task = c.req.query('task')
+  if (task) {
+    return c.json(Object.fromEntries(
+      Object.entries(result).filter(([_, classification]) => 
+        classification?.task === task
+      )
+    ))
+  }
+  
+  return c.json(result)
 })
 
 app.get('/api/models/:owner/:modelName', async (c) => {

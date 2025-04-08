@@ -114,6 +114,22 @@ GET /api/classifications
 
 Returns a JSON object containing all cached model classifications. Each key is the model identifier (owner/modelName) and the value is the classification data.
 
+You can filter the results by task type using the `task` query parameter:
+
+```plaintext
+GET /api/classifications?task=text-generation
+```
+
+Examples:
+
+- [All text generation models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=text-generation)
+- [All image-to-image models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=image-to-image)
+- [All text-to-image models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=text-to-image)
+- [All visual question answering models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=visual-question-answering)
+- [All image classification models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=image-classification)
+
+For a list of all available task types, see [/api/taskNames](https://replicate-model-classifier.ziki.workers.dev/api/taskNames).
+
 Example response:
 
 ```json
