@@ -143,6 +143,16 @@ app.post('/api/cache/purge', async (c) => {
   }
 })
 
+app.get('/api/classifications', async (c) => {
+  const keys = await c.env.CLASSIFICATIONS_CACHE.list()
+  const classifications = await Promise.all(keys.keys.map(async key => {
+    const data = await c.env.CLASSIFICATIONS_CACHE.get<CachedData>(key.name, 'json')
+    return [key.name, data?.classification]
+  }))
+  
+  return c.json(Object.fromEntries(classifications))
+})
+
 app.get('/api/models/:owner/:modelName', async (c) => {
   const { owner, modelName } = c.req.param()
   const cacheKey = `${owner}/${modelName}`

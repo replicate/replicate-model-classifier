@@ -105,3 +105,34 @@ GET /api/taskNames
 ```
 
 See [/api/taskNames](https://replicate-model-classifier.ziki.workers.dev/api/taskNames)
+
+## View all cached classifications
+
+```plaintext
+GET /api/classifications
+```
+
+Returns a JSON object containing all cached model classifications. Each key is the model identifier (owner/modelName) and the value is the classification data.
+
+Example response:
+
+```json
+{
+  "salesforce/blip": {
+    "summary": "Generate image captions and answer questions about images",
+    "inputTypes": ["image", "text"],
+    "outputTypes": ["text"],
+    "task": "visual-question-answering",
+    "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions."
+  },
+  "meta/meta-llama-3-8b-instruct": {
+    "summary": "A large language model for text generation and instruction following",
+    "inputTypes": ["text"],
+    "outputTypes": ["text"],
+    "task": "text-generation",
+    "taskSummary": "Text generation is the task of generating text that is coherent and contextually relevant."
+  }
+}
+```
+
+See [/api/classifications](https://replicate-model-classifier.ziki.workers.dev/api/classifications)
