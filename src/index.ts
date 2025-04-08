@@ -61,6 +61,8 @@ interface CachedData {
 }
 
 app.get('/', async (c) => {
+  // Since Cloudflare Workers don't have access to the local filesystem,
+  // we need to fetch the README.md content from GitHub directly
   const rawReadmeUrl = 'https://raw.githubusercontent.com/zeke/replicate-model-classifier/refs/heads/main/README.md'
   const readme = await fetch(rawReadmeUrl).then(res => res.text())
   const html = `
