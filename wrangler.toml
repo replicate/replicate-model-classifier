@@ -10,3 +10,10 @@ kv_namespaces = [
   { binding = "CLASSIFICATIONS_CACHE", id = "e8c439371ebb495ebd9549366e8a130f" }
 ]
 
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = true
+
+
+
