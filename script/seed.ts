@@ -4,6 +4,7 @@ import models from 'all-the-public-replicate-models'
 import {chain} from 'lodash-es'
 
 const MAX_MODELS = 1000
+const SLEEP_DURATION = 0.5 * 1000
 
 const mostRunModels = chain(models)
   .orderBy('run_count', 'desc')
@@ -41,7 +42,7 @@ for (const model of mostRunModels) {
         
         const isCached = response.headers.get('X-Cache') === 'HIT'
         if (!isCached) {
-            await new Promise(resolve => setTimeout(resolve, 10 * 1000))
+            await new Promise(resolve => setTimeout(resolve, SLEEP_DURATION))
         }
     } catch (error) {
         console.error(`\nError processing ${url}:`, error.message)
