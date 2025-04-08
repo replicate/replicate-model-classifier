@@ -144,7 +144,7 @@ app.post('/api/cache/purge', async (c) => {
 })
 
 app.get('/api/classifications', async (c) => {
-  const keys = await c.env.CLASSIFICATIONS_CACHE.list()
+  const keys = await c.env.CLASSIFICATIONS_CACHE.list({ limit: 995 })
   const classifications = await Promise.all(keys.keys.map(async key => {
     const data = await c.env.CLASSIFICATIONS_CACHE.get<CachedData>(key.name, 'json')
     return [key.name, data?.classification]
