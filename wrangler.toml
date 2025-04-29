@@ -10,5 +10,10 @@ compatibility_flags = [ "nodejs_compat" ]
 [observability.logs]
 enabled = true
 
+[[d1_databases]]
+binding = "DB"
+database_name = "replicate-classifier-cache"
+database_id = "b9096b5c-0dfd-4af7-886a-c0cacb1ead65"
+
 
 

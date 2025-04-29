@@ -9,6 +9,7 @@ Powered by:
 - **Anthropic Claude 3.7 Sonnet** for model classification
 - **Replicate API** for model metadata
 - **Hugging Face Tasks** for model task metadata
+- **Cloudflare D1** for caching classifications
 
 Repository: https://github.com/zeke/replicate-model-classifier
 
@@ -22,7 +23,7 @@ Base URL: `https://replicate-model-classifier.ziki.workers.dev/`
 GET /api/models/:owner/:model
 ```
 
-Returns a JSON object with the model classification:
+Returns a JSON object with the model classification. Responses are cached for 10 years.
 
 ```json
 {
@@ -48,6 +49,10 @@ Returns a JSON object with the model classification:
     }
 }
 ```
+
+The response includes cache headers:
+- `X-Cache`: Either "HIT" or "MISS" to indicate if the response came from cache
+- `Cache-Control`: "public, max-age=315360000" (10 years)
 
 Examples
 
@@ -89,6 +94,71 @@ Examples:
 - [/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1)
 - [/api/models/meta/meta-llama-3-8b-instruct?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/meta/meta-llama-3-8b-instruct?debug=1)
 - [/api/models/black-forest-labs/flux-schnell?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/black-forest-labs/flux-schnell?debug=1)
+
+### View all classifications
+
+Get all cached model classifications:
+
+```plaintext
+GET /api/classifications
+```
+
+Returns a JSON object with all cached classifications:
+
+```json
+{
+  "classifications": [
+    {
+      "model": "salesforce/blip",
+      "classification": {
+        "summary": "Generate image captions and answer questions about images",
+        "inputTypes": ["image", "text"],
+        "outputTypes": ["text"],
+        "task": "visual-question-answering",
+        "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions.",
+        "useCases": [
+          "Generate image captions for social media",
+          "Answer questions about medical images",
+          "Create alt text for accessibility",
+          "Analyze security camera footage",
+          "Describe artwork for museums",
+          "Generate product descriptions",
+          "Answer questions about diagrams",
+          "Create image-based quizzes",
+          "Analyze satellite imagery",
+          "Describe scenes in videos"
+        ]
+      },
+      "createdAt": "2024-04-29T04:00:00.000Z",
+      "updatedAt": "2024-04-29T04:00:00.000Z"
+    }
+  ]
+}
+```
+
+### View cache statistics
+
+Get statistics about the classification cache:
+
+```plaintext
+GET /api/cache/stats
+```
+
+Returns a JSON object with cache statistics:
+
+```json
+{
+  "total": 100,
+  "oldest": {
+    "model": "salesforce/blip",
+    "createdAt": "2024-04-29T04:00:00.000Z"
+  },
+  "newest": {
+    "model": "meta/meta-llama-3-8b-instruct",
+    "createdAt": "2024-04-29T05:00:00.000Z"
+  }
+}
+```
 
 ## View Hugging Face task data
 
