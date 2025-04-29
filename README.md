@@ -5,7 +5,6 @@ An HTTP API to classify [Replicate models](https://replicate.com/explore) into [
 Powered by:
 
 - **Cloudflare Workers** for hosting the HTTP API
-- **Cloudflare KV** for caching
 - **Hono** for authoring the HTTP API
 - **Anthropic Claude 3.7 Sonnet** for model classification
 - **Replicate API** for model metadata
@@ -25,31 +24,30 @@ GET /api/models/:owner/:model
 
 Returns a JSON object with the model classification:
 
-
-  ```json
-  {
-      "model": "salesforce/blip",
-      "classification": {
-          "summary": "Generate image captions and answer questions about images",
-          "inputTypes": ["image", "text"],
-          "outputTypes": ["text"],
-          "task": "visual-question-answering",
-          "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions.",
-          "useCases": [
-            "Generate image captions for social media",
-            "Answer questions about medical images",
-            "Create alt text for accessibility",
-            "Analyze security camera footage",
-            "Describe artwork for museums",
-            "Generate product descriptions",
-            "Answer questions about diagrams",
-            "Create image-based quizzes",
-            "Analyze satellite imagery",
-            "Describe scenes in videos"
-          ]
-      }
-  }
-  ```
+```json
+{
+    "model": "salesforce/blip",
+    "classification": {
+        "summary": "Generate image captions and answer questions about images",
+        "inputTypes": ["image", "text"],
+        "outputTypes": ["text"],
+        "task": "visual-question-answering",
+        "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions.",
+        "useCases": [
+          "Generate image captions for social media",
+          "Answer questions about medical images",
+          "Create alt text for accessibility",
+          "Analyze security camera footage",
+          "Describe artwork for museums",
+          "Generate product descriptions",
+          "Answer questions about diagrams",
+          "Create image-based quizzes",
+          "Analyze satellite imagery",
+          "Describe scenes in videos"
+        ]
+    }
+}
+```
 
 Examples
 
@@ -63,7 +61,6 @@ Examples
 - [/api/models/tencentarc/gfpgan](https://replicate-model-classifier.ziki.workers.dev/api/models/tencentarc/gfpgan)
 - [/api/models/andreasjansson/clip-features](https://replicate-model-classifier.ziki.workers.dev/api/models/andreasjansson/clip-features)
 - [/api/models/stability-ai/sdxl](https://replicate-model-classifier.ziki.workers.dev/api/models/stability-ai/sdxl)
-
 
 ### View the prompt
 
@@ -79,7 +76,7 @@ Examples
 - [/api/models/meta/meta-llama-3-8b-instruct?prompt=1](https://replicate-model-classifier.ziki.workers.dev/api/models/meta/meta-llama-3-8b-instruct?prompt=1)
 - [/api/models/black-forest-labs/flux-schnell?prompt=1](https://replicate-model-classifier.ziki.workers.dev/api/models/black-forest-labs/flux-schnell?prompt=1)
 
-## View everything
+### View everything
 
 It can be helpful to see all the data that goes into the model classification. You can see all the data by adding the `debug` query parameter:
 
@@ -92,15 +89,6 @@ Examples:
 - [/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/wavespeedai/wan-2.1-i2v-480p?debug=1)
 - [/api/models/meta/meta-llama-3-8b-instruct?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/meta/meta-llama-3-8b-instruct?debug=1)
 - [/api/models/black-forest-labs/flux-schnell?debug=1](https://replicate-model-classifier.ziki.workers.dev/api/models/black-forest-labs/flux-schnell?debug=1)
-
-## Bust the cache
-
-Responses are cached forever by default. To bust the cache for a specific model, use the `force` query parameter:
-
-```plaintext
-GET /api/models/:owner/:model?force=1
-```
-
 
 ## View Hugging Face task data
 
@@ -118,78 +106,9 @@ GET /api/taskNames
 
 See [/api/taskNames](https://replicate-model-classifier.ziki.workers.dev/api/taskNames)
 
-## View all cached classifications
-
-```plaintext
-GET /api/classifications
-```
-
-Returns a JSON object containing all cached model classifications. Each key is the model identifier (owner/modelName) and the value is the classification data.
-
-You can filter the results by task type using the `task` query parameter:
-
-```plaintext
-GET /api/classifications?task=text-generation
-```
-
-Examples:
-
-- [All text generation models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=text-generation)
-- [All image-to-image models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=image-to-image)
-- [All text-to-image models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=text-to-image)
-- [All visual question answering models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=visual-question-answering)
-- [All image classification models](https://replicate-model-classifier.ziki.workers.dev/api/classifications?task=image-classification)
-
-For a list of all available task types, see [/api/taskNames](https://replicate-model-classifier.ziki.workers.dev/api/taskNames).
-
-Example response:
-
-```json
-{
-  "salesforce/blip": {
-    "summary": "Generate image captions and answer questions about images",
-    "inputTypes": ["image", "text"],
-    "outputTypes": ["text"],
-    "task": "visual-question-answering",
-    "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions.",
-    "useCases": [
-      "Generate image captions for social media",
-      "Answer questions about medical images",
-      "Create alt text for accessibility",
-      "Analyze security camera footage",
-      "Describe artwork for museums",
-      "Generate product descriptions",
-      "Answer questions about diagrams",
-      "Create image-based quizzes",
-      "Analyze satellite imagery",
-      "Describe scenes in videos"
-    ]
-  },
-  "meta/meta-llama-3-8b-instruct": {
-    "summary": "A large language model for text generation and instruction following",
-    "inputTypes": ["text"],
-    "outputTypes": ["text"],
-    "task": "text-generation",
-    "taskSummary": "Text generation is the task of generating text that is coherent and contextually relevant.",
-    "useCases": [
-      "Generate creative writing prompts",
-      "Answer customer support questions",
-      "Create personalized email responses",
-      "Generate code documentation",
-      "Write product descriptions",
-      "Create social media posts",
-      "Generate interview questions",
-      "Write blog post outlines",
-      "Create study guides",
-      "Generate marketing copy"
-    ]
-  }
-}
-```
-
 ## Use Cases
 
-Each model classification now includes a `useCases` array that provides 10 specific use cases for the model. These use cases are generated by the language model based on the model's capabilities, input/output types, and task classification. Each use case is a concise, single-sentence description of a practical application of the model.
+Each model classification includes a `useCases` array that provides 10 specific use cases for the model. These use cases are generated by the language model based on the model's capabilities, input/output types, and task classification. Each use case is a concise, single-sentence description of a practical application of the model.
 
 The use cases are designed to be:
 - Specific and actionable
@@ -199,5 +118,3 @@ The use cases are designed to be:
 - Practical and real-world focused
 
 This feature helps users quickly understand the potential applications of each model and find models that match their specific needs.
-
-See [/api/classifications](https://replicate-model-classifier.ziki.workers.dev/api/classifications)

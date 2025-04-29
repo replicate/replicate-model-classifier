@@ -13,8 +13,8 @@ const mostRunModels = chain(models)
 
 console.log("Seeding the cache with the most run models:")
 
-const baseUrl = 'https://replicate-model-classifier.ziki.workers.dev'
-// const baseUrl = 'http://localhost:8787'
+// const baseUrl = 'https://replicate-model-classifier.ziki.workers.dev'
+const baseUrl = 'http://localhost:8787'
 
 for (const model of mostRunModels) {  
     const url = `${baseUrl}/api/models/${model.owner}/${model.name}`

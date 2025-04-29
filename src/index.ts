@@ -15,49 +15,6 @@ app.use(cors());
 interface Env {
   REPLICATE_API_TOKEN: string
   ANTHROPIC_API_KEY: string
-  CLASSIFICATIONS_CACHE: KVNamespace
-}
-
-interface CachedData {
-  classification: {
-    summary: string
-    inputTypes: string[]
-    outputTypes: string[]
-    task: string
-    taskSummary: string
-  }
-  prompt: string
-  claudeResponse: {
-    content: Array<{
-      text: string
-    }>
-  }
-  model: {
-    name: string
-    description: string
-    owner: string
-    latest_version: {
-      openapi_schema: {
-        components: {
-          schemas: {
-            Input: {
-              properties: Record<string, {
-                description: string
-                type: string
-              }>
-            }
-            Output: {
-              properties?: Record<string, unknown>
-            }
-          }
-        }
-      }
-    }
-  }
-  examples: Array<{
-    input: Record<string, unknown>
-    output: unknown
-  }>
 }
 
 app.get('/', async (c) => {
@@ -109,94 +66,14 @@ app.get('/api/taskNames', async (c) => {
   return c.json(taskNames)
 })
 
-app.post('/api/cache/purge', async (c) => {
-  try {
-    let totalDeleted = 0
-    let cursor: string | undefined
-    
-    do {
-      // List keys with pagination
-      const keys = await c.env.CLASSIFICATIONS_CACHE.list({ cursor })
-      
-      // Delete each key in the current page
-      const deletePromises = keys.keys.map(key => 
-        c.env.CLASSIFICATIONS_CACHE.delete(key.name)
-      )
-      
-      await Promise.all(deletePromises)
-      totalDeleted += keys.keys.length
-      
-      // Get the cursor for the next page
-      cursor = keys.list_complete ? undefined : keys.cursor
-    } while (cursor)
-    
-    return c.json({
-      success: true,
-      message: `Successfully purged ${totalDeleted} entries from cache`
-    })
-  } catch (error) {
-    console.error('Error purging cache:', error)
-    return c.json({
-      success: false,
-      error: 'Failed to purge cache'
-    }, 500)
-  }
-})
-
 app.get('/api/classifications', async (c) => {
-  const keys = await c.env.CLASSIFICATIONS_CACHE.list({ limit: 995 })
-  const classifications = await Promise.all(keys.keys.map(async key => {
-    const data = await c.env.CLASSIFICATIONS_CACHE.get<CachedData>(key.name, 'json')
-    return [key.name, data?.classification]
-  }))
-  
-  const result = Object.fromEntries(classifications)
-  
-  // Filter by task if task query param is provided
-  const task = c.req.query('task')
-  if (task) {
-    return c.json(Object.fromEntries(
-      Object.entries(result).filter(([_, classification]) => 
-        classification?.task === task
-      )
-    ))
-  }
-  
-  return c.json(result)
+  return c.json({ message: 'This endpoint has been removed' }, 410)
 })
 
 app.get('/api/models/:owner/:modelName', async (c) => {
   const { owner, modelName } = c.req.param()
   const cacheKey = `${owner}/${modelName}`
   
-  // Check cache first, unless force refresh is requested
-  if (!c.req.query('force')) {
-    const cachedData = await c.env.CLASSIFICATIONS_CACHE.get<CachedData>(cacheKey, 'json')
-    if (cachedData) {
-      console.log('Cache hit for', cacheKey)
-      // If debug mode is requested, return full data
-      if (c.req.query('debug')) {
-        return c.json(cachedData, 200, {
-          'X-Cache': 'HIT'
-        })
-      }
-      // If prompt is requested, return the prompt used
-      if (c.req.query('prompt')) {
-        return c.text(cachedData.prompt, 200, {
-          'X-Cache': 'HIT'
-        })
-      }
-      // Return normal response
-      return c.json({
-        model: cacheKey,
-        classification: cachedData.classification
-      }, 200, {
-        'X-Cache': 'HIT'
-      })
-    }
-  }
-  console.log('Cache miss for', cacheKey)
-
   const replicate = new Replicate({auth: c.env.REPLICATE_API_TOKEN})
   const model = await replicate.models.get(owner, modelName)
 
@@ -333,17 +210,21 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     
     classification.taskSummary = TASKS_DATA[classification.task]?.summary
 
-    // Prepare data for caching
-    const cacheData = {
-      classification,
-      prompt,
-      claudeResponse,
-      model,
-      examples
+    // Show everything
+    if (c.req.query('debug')) {
+      return c.json({
+        classification,
+        prompt,
+        claudeResponse,
+        model,
+        examples
+      })
     }
 
-    // Cache the data forever (no expirationTtl)
-    await c.env.CLASSIFICATIONS_CACHE.put(cacheKey, JSON.stringify(cacheData))
+    return c.json({
+      model: cacheKey,
+      classification
+    })
   } catch (e) {
     console.error(e)
     return c.json({
@@ -351,22 +232,6 @@ app.get('/api/models/:owner/:modelName', async (c) => {
       message: e.message
     }, 500)
   }
-
-  // Show everything
-  if (c.req.query('debug')) {
-    return c.json({
-      classification,
-      prompt,
-      claudeResponse,
-      model,
-      examples
-    })
-  }
-
-  return c.json({
-    model: cacheKey,
-    classification
-  })
 })
 
 export default app;
