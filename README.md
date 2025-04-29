@@ -103,6 +103,8 @@ Get all cached model classifications:
 GET /api/classifications
 ```
 
+See [/api/classifications](https://replicate-model-classifier.ziki.workers.dev/api/classifications)
+
 Returns a JSON object with all cached classifications:
 
 ```json
