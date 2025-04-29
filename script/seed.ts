@@ -13,8 +13,8 @@ const mostRunModels = chain(models)
 
 console.log("Seeding the cache with the most run models:")
 
-// const baseUrl = 'https://replicate-model-classifier.ziki.workers.dev'
-const baseUrl = 'http://localhost:8787'
+const baseUrl = 'https://replicate-model-classifier.ziki.workers.dev'
+// const baseUrl = 'http://localhost:8787'
 
 let total = 0
 let cached = 0
@@ -22,40 +22,36 @@ let errors = 0
 
 for (const model of mostRunModels) {  
     const url = `${baseUrl}/api/models/${model.owner}/${model.name}`
-    console.log(`Processing ${model.owner}/${model.name}...`)
     
     try {
         const response = await fetch(url)
         const responseText = await response.text()
         
         if (!response.ok) {
-            console.error(`\nError fetching ${url}: ${response.status} ${response.statusText}`)
-            console.error('Response:', responseText)
+            console.log(`❌ ${model.owner}/${model.name} - Error: ${response.status} ${response.statusText}`)
             errors++
             continue
         }
         
         try {
-            // Only try to parse as JSON if we got a successful response
             JSON.parse(responseText)
             total++
             
             const isCached = response.headers.get('X-Cache') === 'HIT'
             if (isCached) {
                 cached++
-                console.log('✓ Cached')
+                console.log(`✓ ${model.owner}/${model.name} - Cached`)
             } else {
-                console.log('✓ New')
+                console.log(`✓ ${model.owner}/${model.name} - New`)
                 await new Promise(resolve => setTimeout(resolve, SLEEP_DURATION))
             }
         } catch (parseError) {
-            console.error(`\nError parsing JSON for ${url}:`, parseError.message)
-            console.error('Response text:', responseText)
+            console.log(`❌ ${model.owner}/${model.name} - JSON parse error: ${parseError.message}`)
             errors++
             continue
         }
     } catch (error) {
-        console.error(`\nError processing ${url}:`, error.message)
+        console.log(`❌ ${model.owner}/${model.name} - Error: ${error.message}`)
         errors++
         continue
     }
