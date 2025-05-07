@@ -3,8 +3,8 @@
 import models from 'all-the-public-replicate-models'
 import {chain} from 'lodash-es'
 
-const MAX_MODELS = 10000
-const SLEEP_DURATION = 0.5 * 1000
+const MAX_MODELS = 20_000
+const SLEEP_DURATION = 0 * 1000
 
 const mostRunModels = chain(models)
   .orderBy('run_count', 'desc')
