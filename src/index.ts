@@ -148,22 +148,6 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   const cacheKey = `${owner}/${modelName}`
   
   const db = drizzle(c.env.DB)
-  
-  // Try to get from cache first
-  const cached = await db.select()
-    .from(modelClassifications)
-    .where(eq(modelClassifications.modelKey, cacheKey))
-    .get()
-
-  if (cached) {
-    return c.json({
-      model: cacheKey,
-      classification: JSON.parse(cached.classification)
-    }, 200, {
-      'X-Cache': 'HIT',
-      'Cache-Control': 'public, max-age=315360000' // 10 years
-    })
-  }
 
   const replicate = new Replicate({auth: c.env.REPLICATE_API_TOKEN})
   const model = await replicate.models.get(owner, modelName) as ReplicateModel
@@ -283,6 +267,22 @@ app.get('/api/models/:owner/:modelName', async (c) => {
 
   if (c.req.query('prompt')) {
     return c.text(prompt)
+  }
+  
+  // Try to get from cache first
+  const cached = await db.select()
+    .from(modelClassifications)
+    .where(eq(modelClassifications.modelKey, cacheKey))
+    .get()
+
+  if (cached) {
+    return c.json({
+      model: cacheKey,
+      classification: JSON.parse(cached.classification)
+    }, 200, {
+      'X-Cache': 'HIT',
+      'Cache-Control': 'public, max-age=315360000' // 10 years
+    })
   }
 
   let classification: Classification
