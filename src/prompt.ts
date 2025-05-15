@@ -6,6 +6,8 @@ import { marked } from 'marked';
 interface ReplicateModel {
   name: string;
   description: string;
+  owner: string;
+  url: string;
   latest_version?: {
     openapi_schema?: {
       components?: {
@@ -120,12 +122,12 @@ export function generatePrompt({
   The post should include:
 
   - A short introduction to the model
-  - A link to the model with a fully qualified name, e.g. https://replicate.com/alice/model-a or https://replicate.com/bob/model-b
+  - A link to the model with a fully qualified name: ${model.url}
   - Images or videos from the example model outputs. Use <video> tags for videos. Wrap image and video tags with links to the prediction page, e.g. https://replicate.com/p/{prediction_id}
   - A mentiong of the model author
   - The date the model was created
   - A list of example use cases for the model
-  - Sample code for running it with \`replicate.run\` using the JavaScript client. Be sure to use owner/name as the model name format, e.g. alice/model-a or bob/model-b.
+  - Sample code for running it with \`replicate.run\` using the JavaScript client. Be sure to use ${model.owner}/${model.name} as the model name format. If the model has a version, include it in this format: ${model.owner}/${model.name}/${model.latest_version.id}.
   - Do not mention pricing.
   - Do not include an H1 header (#) -- that will be generated from the frontmatter.
 
