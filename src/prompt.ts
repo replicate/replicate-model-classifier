@@ -120,12 +120,12 @@ export function generatePrompt({
   The post should include:
 
   - A short introduction to the model
-  - A link to the model with a fully qualified name, e.g. https://replicate.com/{owner}/{name}
+  - A link to the model with a fully qualified name, e.g. https://replicate.com/alice/model-a or https://replicate.com/bob/model-b
   - Images or videos from the example model outputs. Use <video> tags for videos. Wrap image and video tags with links to the prediction page, e.g. https://replicate.com/p/{prediction_id}
   - A mentiong of the model author
   - The date the model was created
   - A list of example use cases for the model
-  - Sample code for running it with \`replicate.run\` using the JavaScript client. Be sure to use \`{owner}/{name}\` as the model name format. Be sure to close the \`\`\` code block.
+  - Sample code for running it with \`replicate.run\` using the JavaScript client. Be sure to use owner/name as the model name format, e.g. alice/model-a or bob/model-b.
   - Do not mention pricing.
   - Do not include an H1 header (#) -- that will be generated from the frontmatter.
 
