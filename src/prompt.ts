@@ -136,7 +136,7 @@ export function generatePrompt({
   authors:
     - blog-o-matic
   intro: Short intro goes here
-  publishedAt: 2025-04-16
+  publishedAt: YYYY-MM-DD
   ---
 
   The post should follow these style guidelines:
