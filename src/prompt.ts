@@ -120,12 +120,17 @@ export function generatePrompt({
   The post should include:
 
   - A short introduction to the model
-  - Images or videos from the example model outputs
+  - Images or videos from the example model outputs.
   - A mentiong of the model author
   - The date the model was created
   - A link to the model
   - A list of example use cases for the model
   - Sample code for running ith with \`replicate.run\` using the JavaScript client
+
+  Details:
+
+  - Use <video> tags for videos.
+  - Wrap image tags with links to the prediction page, e.g. https://replicate.com/p/{prediction_id}
 
   The post should follow these style guidelines:
 
