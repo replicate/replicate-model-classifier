@@ -125,10 +125,23 @@ export function generatePrompt({
   - A mentiong of the model author
   - The date the model was created
   - A list of example use cases for the model
-  - Sample code for running ith with \`replicate.run\` using the JavaScript client. Be sure to use \`{owner}/{name}\` as the model name format.
+  - Sample code for running it with \`replicate.run\` using the JavaScript client. Be sure to use \`{owner}/{name}\` as the model name format. Be sure to close the \`\`\` code block.
+  - Do not mention pricing.
+  - Do not include an H1 header (#) -- that will be generated from the frontmatter.
+
+  Blog post should have YAML frontmatter with the following fields:
+
+  ---
+  title: Title goes here
+  authors:
+    - blog-o-matic
+  intro: Short intro goes here
+  publishedAt: 2025-04-16
+  ---
 
   The post should follow these style guidelines:
 
+  - Don't start the post with sayings like "We're excited to announce that..."
   - Talk like a human, not a corporation.
   - Avoid corporate and startup jargon.
   - Be clear, direct, and conversational.
