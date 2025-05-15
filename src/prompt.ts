@@ -102,7 +102,6 @@ export function generatePrompt({
   - Generate music from text prompts
   - Create 3D models from 2D images
   - Translate spoken language in real time
-  - Recommend personalized workout plans
   - Convert handwriting to digital text
   - Classify email as spam or not spam
   - Detect plagiarism in text
@@ -113,22 +112,46 @@ export function generatePrompt({
   - Generate resumes from a set of achievements
   - Fix blurry images
   - Identify key moments in video footage
-  - Generate storyboards from a movie script
-  - Enhance low-light photography
-  - Generate realistic human faces
-  - Fill missing sections of an audio clip
-  - Analyze sentiment in customer reviews
-  - Generate fashion outfit recommendations
-  - Create emoji versions of faces
-  - Generate full songs with lyrics from a prompt
-  - Inpaint missing parts of an image
-  - Extract named entities from a document (people, places, etc.)
-  - Remove motion blur from video frames
-  - Tag and organize photo libraries automatically
-  - Simulate realistic crowd movements for games/movies
-  - Predict disease outbreaks from search trends
-  - Build personalized nutrition plans from health data
-  - Detect anomalies in manufacturing product images
+
+  ## Blog post
+
+  Include a blog post in markdown format.
+
+  The post should include:
+
+  - A short introduction to the model
+  - Images or videos from the example model outputs
+  - A mentiong of the model author
+  - The date the model was created
+  - A link to the model
+  - A list of example use cases for the model
+  - Sample code for running ith with \`replicate.run\` using the JavaScript client
+
+  The post should follow these style guidelines:
+
+  - Talk like a human, not a corporation.
+  - Avoid corporate and startup jargon.
+  - Be clear, direct, and conversational.
+  - Don't oversell or exaggerate; be specific.
+  - Use humor, but make sure it's inclusive and accessible.
+  - Use simple, common words (e.g., “improve” not “revolutionize,” “use” not “leverage”).
+  - Avoid acronyms unless commonly understood (e.g., AI, API).
+  - Use active voice
+  - Don't assume specialist knowledge.
+  - Use gender-neutral and inclusive language.
+  - Avoid ableist and exclusionary terms (“crazy,” “lame,” etc.).
+  - Avoid words like “easy,” “simply,” or “just do X.”
+  - Use sentence case, not Title Case.
+  - Use bold only for UI elements, not emphasis.
+  - Use inline code formatting for filenames and commands.
+  - Spell out large numbers (e.g., “7 billion parameters”).
+  - Use ISO 8601 dates (YYYY-MM-DD) or human-readable formats (e.g., “October 24, 2024”).
+  - Use American English spelling and grammar (e.g., “color” not “colour”).
+  - Refer to models as the user's, not Replicate's.
+  - Use “Replicate,” not “Replicate AI” or “Replicate.com.”
+  - Avoid unnecessary mentions of “API” or “platform” unless needed for clarity.
+  - Be honest. Don't hide reality.
+  - Minimize exclamation points.
 
   ## Output format
 
@@ -139,6 +162,7 @@ export function generatePrompt({
   - outputTypes: An array of the types of outputs the model returns, like "text", "image", "audio", etc.
   - task: The task the model performs. This should be one of the Hugging Face task names.
   - useCases: An array of 10 use cases for the model. Each one should be a single sentence of 8 words or less.
+  - blogPost: A blog post announcing  the model
 
   Do not include any other text in your response.
   Do not explain your reasoning.
