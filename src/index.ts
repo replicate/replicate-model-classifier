@@ -150,6 +150,9 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   
   const db = drizzle(c.env.DB)
 
+  // Check for bust query param
+  const bustCache = c.req.query('bust')
+
   const replicate = new Replicate({auth: c.env.REPLICATE_API_TOKEN})
   const model = await replicate.models.get(owner, modelName) as ReplicateModel
 
@@ -171,11 +174,14 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     return c.text(prompt)
   }
   
-  // Try to get from cache first
-  const cached = await db.select()
-    .from(modelClassifications)
-    .where(eq(modelClassifications.modelKey, cacheKey))
-    .get()
+  // Try to get from cache first, unless bust is set
+  let cached: { modelKey: string; classification: string; createdAt: Date; updatedAt: Date } | undefined = undefined
+  if (!bustCache) {
+    cached = await db.select()
+      .from(modelClassifications)
+      .where(eq(modelClassifications.modelKey, cacheKey))
+      .get()
+  }
 
   if (cached) {
     return c.json({
@@ -190,6 +196,12 @@ app.get('/api/models/:owner/:modelName', async (c) => {
   let classification: Classification
   let claudeResponse: Anthropic.Message
   try {
+    // If busting cache, delete any existing cache entry for this modelKey
+    if (bustCache) {
+      await db.delete(modelClassifications)
+        .where(eq(modelClassifications.modelKey, cacheKey))
+        .run();
+    }
     const anthropic = new Anthropic({
       apiKey: c.env.ANTHROPIC_API_KEY
     });

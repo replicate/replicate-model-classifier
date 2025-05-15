@@ -23,7 +23,21 @@ Base URL: `https://replicate-model-classifier.ziki.workers.dev/`
 GET /api/models/:owner/:model
 ```
 
-Returns a JSON object with the model classification. Responses are cached for 10 years.
+Returns a JSON object with the model classification. Responses are cached.
+
+**Cache Busting**
+
+To force a fresh classification and bypass the cache, add the `bust=1` query parameter:
+
+```plaintext
+GET /api/models/:owner/:model?bust=1
+```
+
+This will skip the cache and trigger a new classification, updating the cache with the latest result.
+
+Example:
+
+- `/api/models/salesforce/blip?bust=1`
 
 ```json
 {
