@@ -208,7 +208,7 @@ app.get('/api/models/:owner/:modelName', async (c) => {
     claudeResponse = await anthropic.messages.create({
       model: "claude-3-7-sonnet-20250219",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1024
+      max_tokens: 4 * 1024 // The maximum number of tokens to generate before stopping.
     });
     console.log(claudeResponse.content[0].text);
     classification = JSON.parse(claudeResponse.content[0].text) as Classification;
