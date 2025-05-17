@@ -87,6 +87,38 @@ export function generatePrompt({
     `;
   }).join('\n')}
 
+  ## Categories
+
+  Categories are like tags that describe the model. 
+
+  Examples:
+
+  audio
+  cinematic
+  colorization
+  denoising
+  diffusion
+  facial-landmark-detection
+  image
+  image
+  inpainting
+  object-segmentation
+  ocr
+  physics
+  pose-estimation
+  prompt-conditioning
+  restoration
+  speech-synthesis
+  speech-to-text
+  stabilization
+  style-transfer
+  super-resolution
+  text
+  typography
+  upscaling
+  vector
+  video
+
   ## Use cases
 
   Based on the information above, please provide a list of use cases for the model.
@@ -176,6 +208,7 @@ export function generatePrompt({
   - inputTypes: An array of the types of inputs the model accepts, like "text", "image", "audio", etc.
   - outputTypes: An array of the types of outputs the model returns, like "text", "image", "audio", etc.
   - task: The task the model performs. This should be one of the Hugging Face task names.
+  - categories: An array of categories the model belongs to. Generate 5 categories for the model.
   - useCases: An array of 10 use cases for the model. Each one should be a single sentence of 8 words or less.
   - blogPost: A blog post announcing  the model
 
