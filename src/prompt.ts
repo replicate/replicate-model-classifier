@@ -147,59 +147,6 @@ export function generatePrompt({
   - Fix blurry images
   - Identify key moments in video footage
 
-  ## Blog post
-
-  Include a blog post in markdown format.
-
-  The post should include:
-
-  - A short introduction to the model
-  - A link to the model with a fully qualified name: ${model.url}
-  - Images or videos from the example model outputs. Use <video> tags for videos. Wrap image and video tags with links to the prediction page, e.g. https://replicate.com/p/{prediction_id}
-  - A mentiong of the model author
-  - The date the model was created
-  - A list of example use cases for the model
-  - Sample code for running it with \`replicate.run\` using the JavaScript client. Be sure to use ${model.owner}/${model.name} as the model name format. If the model has a version, include it in this format: ${model.owner}/${model.name}/${model.latest_version.id}.
-  - Do not mention pricing.
-  - Do not include an H1 header (#) -- that will be generated from the frontmatter.
-
-  Blog post should have YAML frontmatter with the following fields:
-
-  ---
-  title: Title goes here
-  authors:
-    - blog-o-matic
-  intro: Short intro goes here
-  publishedAt: YYYY-MM-DD
-  ---
-
-  The post should follow these style guidelines:
-
-  - Don't start the post with sayings like "We're excited to announce that..."
-  - Talk like a human, not a corporation.
-  - Avoid corporate and startup jargon.
-  - Be clear, direct, and conversational.
-  - Don't oversell or exaggerate; be specific.
-  - Use humor, but make sure it's inclusive and accessible.
-  - Use simple, common words (e.g., “improve” not “revolutionize,” “use” not “leverage”).
-  - Avoid acronyms unless commonly understood (e.g., AI, API).
-  - Use active voice
-  - Don't assume specialist knowledge.
-  - Use gender-neutral and inclusive language.
-  - Avoid ableist and exclusionary terms (“crazy,” “lame,” etc.).
-  - Avoid words like “easy,” “simply,” or “just do X.”
-  - Use sentence case, not Title Case.
-  - Use bold only for UI elements, not emphasis.
-  - Use inline code formatting for filenames and commands.
-  - Spell out large numbers (e.g., “7 billion parameters”).
-  - Use ISO 8601 dates (YYYY-MM-DD) or human-readable formats (e.g., “October 24, 2024”).
-  - Use American English spelling and grammar (e.g., “color” not “colour”).
-  - Refer to models as the user's, not Replicate's.
-  - Use “Replicate,” not “Replicate AI” or “Replicate.com.”
-  - Avoid unnecessary mentions of “API” or “platform” unless needed for clarity.
-  - Be honest. Don't hide reality.
-  - Minimize exclamation points.
-
   ## Output format
 
   Return a JSON object with the following fields:
@@ -210,7 +157,6 @@ export function generatePrompt({
   - task: The task the model performs. This should be one of the Hugging Face task names.
   - categories: An array of categories the model belongs to. Generate 5 categories for the model.
   - useCases: An array of 10 use cases for the model. Each one should be a single sentence of 8 words or less.
-  - blogPost: A blog post announcing  the model
 
   Do not include any other text in your response.
   Do not explain your reasoning.

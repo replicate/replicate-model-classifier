@@ -49,7 +49,6 @@ The response includes a `classification` object with the following fields:
 - `task`: The Hugging Face task name the model performs.
 - `categories`: An array of 5 categories the model belongs to (e.g., "image", "audio", "diffusion").
 - `useCases`: An array of 10 use cases for the model. Each is a single sentence of 8 words or less.
-- `blogPost`: A markdown blog post (with YAML frontmatter) introducing the model, its use cases, and sample code. See below for details.
 
 Example response:
 
@@ -73,8 +72,7 @@ Example response:
       "Create image-based quizzes",
       "Analyze satellite imagery",
       "Describe scenes in videos"
-    ],
-    "blogPost": "---\ntitle: Generate image captions and answer questions\nauthors:\n  - blog-o-matic\nintro: Generate captions and answer questions about images.\npublishedAt: 2024-04-29\n---\n\nThis model helps you generate captions for images and answer questions about them. [View the model on Replicate](https://replicate.com/salesforce/blip).\n\n**Example use cases:**\n- Generate image captions for social media\n- Answer questions about medical images\n- Create alt text for accessibility\n- Analyze security camera footage\n- Describe artwork for museums\n- Generate product descriptions\n- Answer questions about diagrams\n- Create image-based quizzes\n- Analyze satellite imagery\n- Describe scenes in videos\n\n**Sample code:**\n\n```js\nimport Replicate from 'replicate';\nconst replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });\nconst output = await replicate.run(\"salesforce/blip\", {\n  input: { image: 'https://example.com/image.jpg', question: 'What is in this image?' }\n});\nconsole.log(output);\n```\n"
+    ]
   }
 }
 ```
