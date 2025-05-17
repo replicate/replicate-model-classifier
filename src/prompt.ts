@@ -152,8 +152,8 @@ export function generatePrompt({
   Return a JSON object with the following fields:
 
   - summary: A short summary of what the model does in 10 words or less. This should not be a sales pitch.
-  - inputTypes: An array of the types of inputs the model accepts, like "text", "image", "audio", etc.
-  - outputTypes: An array of the types of outputs the model returns, like "text", "image", "audio", etc.
+  - inputTypes: An array of the types of inputs the model accepts, like "text", "image", "audio", "video", etc. These should not have names like "parameters", "inputs", "numeric_parameters", etc.
+  - outputTypes: An array of the types of outputs the model returns, like "text", "image", "audio", "video", etc. These should not have names like "parameters", "outputs", "numeric_parameters", etc.
   - task: The task the model performs. This should be one of the Hugging Face task names.
   - categories: An array of categories the model belongs to. Generate 5 categories for the model.
   - useCases: An array of 10 use cases for the model. Each one should be a single sentence of 8 words or less.
