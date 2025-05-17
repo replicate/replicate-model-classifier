@@ -39,28 +39,43 @@ Example:
 
 - `/api/models/salesforce/blip?bust=1`
 
+**Output Format**
+
+The response includes a `classification` object with the following fields:
+
+- `summary`: A short summary of what the model does in 10 words or less. Not a sales pitch.
+- `inputTypes`: An array of the types of inputs the model accepts, like "text", "image", "audio", etc.
+- `outputTypes`: An array of the types of outputs the model returns, like "text", "image", "audio", etc.
+- `task`: The Hugging Face task name the model performs.
+- `categories`: An array of 5 categories the model belongs to (e.g., "image", "audio", "diffusion").
+- `useCases`: An array of 10 use cases for the model. Each is a single sentence of 8 words or less.
+- `blogPost`: A markdown blog post (with YAML frontmatter) introducing the model, its use cases, and sample code. See below for details.
+
+Example response:
+
 ```json
 {
-    "model": "salesforce/blip",
-    "classification": {
-        "summary": "Generate image captions and answer questions about images",
-        "inputTypes": ["image", "text"],
-        "outputTypes": ["text"],
-        "task": "visual-question-answering",
-        "taskSummary": "Visual Question Answering is the task of answering open-ended questions based on an image. They output natural language responses to natural language questions.",
-        "useCases": [
-          "Generate image captions for social media",
-          "Answer questions about medical images",
-          "Create alt text for accessibility",
-          "Analyze security camera footage",
-          "Describe artwork for museums",
-          "Generate product descriptions",
-          "Answer questions about diagrams",
-          "Create image-based quizzes",
-          "Analyze satellite imagery",
-          "Describe scenes in videos"
-        ]
-    }
+  "model": "salesforce/blip",
+  "classification": {
+    "summary": "Generate image captions and answer questions about images",
+    "inputTypes": ["image", "text"],
+    "outputTypes": ["text"],
+    "task": "visual-question-answering",
+    "categories": ["image", "captioning", "vision", "qa", "multimodal"],
+    "useCases": [
+      "Generate image captions for social media",
+      "Answer questions about medical images",
+      "Create alt text for accessibility",
+      "Analyze security camera footage",
+      "Describe artwork for museums",
+      "Generate product descriptions",
+      "Answer questions about diagrams",
+      "Create image-based quizzes",
+      "Analyze satellite imagery",
+      "Describe scenes in videos"
+    ],
+    "blogPost": "---\ntitle: Generate image captions and answer questions\nauthors:\n  - blog-o-matic\nintro: Generate captions and answer questions about images.\npublishedAt: 2024-04-29\n---\n\nThis model helps you generate captions for images and answer questions about them. [View the model on Replicate](https://replicate.com/salesforce/blip).\n\n**Example use cases:**\n- Generate image captions for social media\n- Answer questions about medical images\n- Create alt text for accessibility\n- Analyze security camera footage\n- Describe artwork for museums\n- Generate product descriptions\n- Answer questions about diagrams\n- Create image-based quizzes\n- Analyze satellite imagery\n- Describe scenes in videos\n\n**Sample code:**\n\n```js\nimport Replicate from 'replicate';\nconst replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN });\nconst output = await replicate.run(\"salesforce/blip\", {\n  input: { image: 'https://example.com/image.jpg', question: 'What is in this image?' }\n});\nconsole.log(output);\n```\n"
+  }
 }
 ```
 
